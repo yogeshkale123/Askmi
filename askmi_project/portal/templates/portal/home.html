@@ -1,0 +1,30 @@
+{% extends 'portal/base.html' %}
+
+{% block content %}
+<h2>Ask a Question</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Post</button>
+</form>
+
+<hr>
+
+<h2>All Questions</h2>
+<ul>
+    {% for question in questions %}
+        <li>
+            <a href="{% url 'question_detail' question.id %}">{{ question.title }}</a>
+            <small>by {{ question.user.username }}</small>
+        </li>
+    {% empty %}
+        <li>No questions yet.</li>
+    {% endfor %}
+    {% if question.user == user %}
+    <a href="{% url 'edit_question' question.id %}">Edit</a> |
+    <a href="{% url 'delete_question' question.id %}">Delete</a>
+    {% endif %}
+
+</ul>
+{% endblock %}
+

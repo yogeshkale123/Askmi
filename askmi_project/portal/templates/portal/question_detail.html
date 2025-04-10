@@ -1,0 +1,45 @@
+{% extends 'portal/base.html' %}
+
+{% block content %}
+<h2>{{ question.title }}</h2>
+<p>Asked by: {{ question.user.username }}</p>
+
+<hr>
+
+<h3>Answers</h3>
+<ul>
+    {% for answer in answers %}
+        <li>
+            {{ answer.content }} - <strong>{{ answer.user.username }}</strong>
+            [<a href="{% url 'like_answer' answer.id %}">Like</a> {{ answer.total_likes }}]
+        </li>
+    {% empty %}
+        <li>No answers yet.</li>
+    {% endfor %}
+
+    {% if question.user == user %}
+    <a href="{% url 'edit_question' question.id %}">Edit</a> |
+    <a href="{% url 'delete_question' question.id %}">Delete</a>
+    {% endif %}
+
+    {% if answer.user == user %}
+    <a href="{% url 'edit_answer' answer.id %}">Edit</a> |
+    <a href="{% url 'delete_answer' answer.id %}">Delete</a>
+   {% endif %}
+
+
+
+   
+
+
+</ul>
+
+<hr>
+
+<h3>Your Answer</h3>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Answer</button>
+</form>
+{% endblock %}
